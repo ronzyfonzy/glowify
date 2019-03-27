@@ -1,0 +1,33 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "react": "^16.8.3",
+    "react-app-env": "^1.2.3",
+    "react-cookies": "^0.1.0",
+    "react-dom": "^16.8.3",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.5",
+    "reactstrap": "^7.1.0"
+  },
+  "scripts": {
+    "start": "react-app-env start --env-file=../.env",
+    "build": "react-app-env build --env-file=../.env",
+    "test": "react-app-env test --env-file=../.env",
+    "eject": "react-app-env eject --env-file=../.env"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "dotenv": "^6.2.0"
+  }
+}
