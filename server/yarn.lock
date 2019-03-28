@@ -2,13 +2,6 @@
 # yarn lockfile v1
 
 
-"@axosoft/glo-sdk@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@axosoft/glo-sdk/-/glo-sdk-1.0.7.tgz#0ae1c343ac7fa337a5b97ea0940e729f38f85b64"
-  integrity sha512-pFeI36dt5nX870yoti9hEPoEvA/rknt0OVRCxSDZIGDfOJeiZp8g84/jtmT4W9Dc9twnm2SbFsE+LIv8UIYeJg==
-  dependencies:
-    axios "^0.18.0"
-
 "@babel/code-frame@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0.tgz#06e2ab19bdb535385559aabb5ba59729482800f8"

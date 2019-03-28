@@ -1,6 +1,6 @@
 import express from 'express'
 import crypto from 'crypto'
-import GloSDK from '@axosoft/glo-sdk'
+import GloApi from '../GloApi'
 import { ORM, Op } from '../orm/orm'
 const router = express.Router()
 
@@ -107,21 +107,21 @@ const initializePublishBoard = async (gloApiKey, glowify) => {
   const publishBoard = await ORM.Board.findOne({ where: { id: glowify.publishBoardId }, raw: true })
   const rankings = await ORM.Ranking.findAll({ raw: true })
 
-  const board = await GloSDK(gloApiKey).boards.get(publishBoard.gloId, { fields: ['columns', 'name'] })
+  const board = await GloApi(gloApiKey).boards.get(publishBoard.gloId, { fields: ['columns'] })
   const { columns } = board
-  const cards = await GloSDK(gloApiKey).boards.cards.getAll(publishBoard.gloId)
+  const cards = await GloApi(gloApiKey).cards.getAll(publishBoard.gloId)
 
   // Clean publish board
   if (columns.length > 0 || cards.length > 0) {
     console.log(`Cleaning up board ${board.title}${board.id}`)
     for (let card of cards) {
       console.log(`Deleting card ${card.id}`)
-      await GloSDK(gloApiKey).boards.cards.delete(publishBoard.gloId, card.id)
+      await GloApi(gloApiKey).cards.delete(publishBoard.gloId, card.id)
     }
 
     for (let column of columns) {
       console.log(`Deleting column ${column.id}`)
-      await GloSDK(gloApiKey).boards.columns.delete(publishBoard.gloId, column.id)
+      await GloApi(gloApiKey).columns.delete(publishBoard.gloId, column.id)
     }
     console.log(`Board cleanup complete`)
   }
@@ -129,8 +129,8 @@ const initializePublishBoard = async (gloApiKey, glowify) => {
   // Init publish board
   let columnsRanks = []
   for (let rank of rankings) {
-    console.log(`Creating rank card ${rank.id}`)
-    const createdColumn = await GloSDK(gloApiKey).boards.columns.create(publishBoard.gloId, rank.name, rank.position)
+    console.log(`Creating rank column ${rank.id}`)
+    const createdColumn = await GloApi(gloApiKey).columns.create(publishBoard.gloId, rank.name, rank.position)
     columnsRanks.push({
       glowifyId: glowify.id,
       rankingId: rank.id,
@@ -159,13 +159,13 @@ router.post('/glo-event', verifyWebhookSignature, (req, res) => {
 })
 
 router.get('/glo-boards', veritySession, (req, res) => {
-  GloSDK(req.session.account.gloApiKey)
-    .boards.getAll()
-    .then(response => {
-      res.status(200).send({ data: response })
+  GloApi(req.session.account.gloApiKey)
+    .boards.getAll({ archived: false })
+    .then(data => {
+      res.status(200).send({ data })
     })
     .catch(error => {
-      console.error({ error })
+      console.error({ error: error })
       if (error.response.status === 401) {
         res.status(503).send({ error: error.message })
       } else {
@@ -213,5 +213,10 @@ router.post('/glowify', veritySession, async (req, res) => {
     res.status(200).send({ data: { glowify, rankColumns: initResult.rankColumns, status: initResult.status } })
   }
 })
+
+// GloApi('pe8d4c60913055ce02f4db856a324e24d27e7dcb4')
+//   .boards.get('5a902accbc21260e0014b420', { fields: ['columns'] })
+//   .then(r => console.log(r))
+//   .catch(e => console.log(e))
 
 export default router

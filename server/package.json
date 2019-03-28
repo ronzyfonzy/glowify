@@ -10,7 +10,6 @@
     "coverage": "cross-env ENV=test nyc --reporter=html mocha --require babel-register --require babel-polyfill test/*.test.js"
   },
   "dependencies": {
-    "@axosoft/glo-sdk": "^1.0.7",
     "axios": "^0.18.0",
     "bcrypt": "3.0.5",
     "body-parser": "^1.18.3",

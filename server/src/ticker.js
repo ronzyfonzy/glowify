@@ -1,5 +1,5 @@
 import { ORM, Op } from './orm/orm'
-import GloSDK from '@axosoft/glo-sdk'
+import GloApi from './GloApi'
 
 class Ticker {
   constructor() {
@@ -26,6 +26,7 @@ class Ticker {
 
       for (let event of events) {
         const userIdentified = `${event.userId}-${event.glowifyId}`
+        console.log(`Processing event ${userIdentified}`)
         if (dbUsers[event.userId] === undefined) {
           dbUsers[userIdentified] = await ORM.GlowifyUser.findOrCreate({
             where: { glowifyId: event.glowifyId, userId: event.userId },
@@ -53,6 +54,7 @@ class Ticker {
         })
       }
 
+      console.log(`Post procession to Glo Api`)
       for (const id in dbUsers) {
         const dbGlowifyUser = await ORM.GlowifyUser.scope('full').findOne({
           where: { userId: dbUsers[id].userId, glowifyId: dbUsers[id].glowifyId },
@@ -69,7 +71,7 @@ class Ticker {
         }
 
         if (!dbGlowifyUser.gloCardId) {
-          const gloCard = await GloSDK(dbGlowifyUser.glowify.account.gloApiKey).boards.cards.create(
+          const gloCard = await GloApi(dbGlowifyUser.glowify.account.gloApiKey).cards.create(
             publishBoard.dataValues.gloId,
             userCardData
           )
@@ -78,8 +80,8 @@ class Ticker {
             gloCardId: gloCard.id,
           })
         } else {
-          await GloSDK(dbGlowifyUser.glowify.account.gloApiKey)
-            .boards.cards.edit(publishBoard.dataValues.gloId, dbGlowifyUser.gloCardId, userCardData)
+          await GloApi(dbGlowifyUser.glowify.account.gloApiKey)
+            .cards.edit(publishBoard.dataValues.gloId, dbGlowifyUser.gloCardId, userCardData)
             .catch(error => console.log(error))
         }
       }
