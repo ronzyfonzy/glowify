@@ -62,6 +62,11 @@ export default class Navigation extends Component {
                 Add glowify
               </NavLink>
             </NavItem>
+            <NavItem className={Session.isAuthenticated ? '' : 'd-none'}>
+              <NavLink tag={RRNavLink} exact to="/event-types" activeClassName="active">
+                Event Types
+              </NavLink>
+            </NavItem>
             <NavItem className={Session.isAuthenticated ? 'd-none' : ''}>
               <NavLink tag={RRNavLink} exact to="/signup" activeClassName="active">
                 Signup

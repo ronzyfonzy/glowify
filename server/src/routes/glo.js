@@ -159,11 +159,9 @@ router.post('/glo-event', verifyWebhookSignature, (req, res) => {
 })
 
 router.get('/glo-boards', veritySession, (req, res) => {
-  console.log(req.session.account.gloApiKey)
   GloSDK(req.session.account.gloApiKey)
     .boards.getAll()
     .then(response => {
-      console.log({ response })
       res.status(200).send({ data: response })
     })
     .catch(error => {
@@ -176,8 +174,16 @@ router.get('/glo-boards', veritySession, (req, res) => {
     })
 })
 
+router.get('/event-types', veritySession, async (req, res) => {
+  const eventTypes = await ORM.EventType.findAll()
+  res.send({ data: { eventTypes } })
+})
+
 router.get('/glowify', veritySession, async (req, res) => {
   const glowify = await ORM.Glowify.scope('boards').findAll({ where: { accountId: req.session.account.id } })
+  for (let g of glowify) {
+    g.dataValues.eventCounter = await ORM.Event.findAndCountAll({ where: { glowifyId: g.dataValues.id } })
+  }
   res.send({ data: { glowify } })
 })
 
@@ -207,7 +213,5 @@ router.post('/glowify', veritySession, async (req, res) => {
     res.status(200).send({ data: { glowify, rankColumns: initResult.rankColumns, status: initResult.status } })
   }
 })
-
-createSignature
 
 export default router

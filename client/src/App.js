@@ -10,6 +10,7 @@ import Signup from './Components/Signup'
 import Login from './Components/Login'
 import Glowifys from './Components/Glowifys'
 import AddGlowify from './Components/AddGlowify'
+import EventTypes from './Components/EventTypes'
 
 const NavigationRouter = withRouter(Navigation)
 
@@ -25,6 +26,7 @@ function AuthExample() {
         <Route path="/user" component={User} />
         <PrivateRoute path="/glowifys" component={Glowifys} />
         <PrivateRoute path="/glowify-add" component={AddGlowify} />
+        <PrivateRoute path="/event-types" component={EventTypes} />
       </Container>
     </Router>
   )

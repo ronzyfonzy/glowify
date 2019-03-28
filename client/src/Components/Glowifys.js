@@ -41,7 +41,6 @@ export default class Glowify extends Component {
   }
 
   toggleShow(id) {
-    console.log(id)
     this.setState({ isSecretHidden: !this.state.isSecretHidden })
   }
 
@@ -61,12 +60,13 @@ export default class Glowify extends Component {
               <th>Payload URL</th>
               <th>Secret</th>
               <th>Publish Board</th>
+              <th>Logged Events Count</th>
             </tr>
           </thead>
           <tbody>
             {this.state.glowifys.map(glowify => (
               <tr key={glowify.id}>
-                <th scope="row">{glowify.id}</th>
+                <td>{glowify.id}</td>
                 <td>{glowify.listenBoard.name}</td>
                 <td>{glowify.webhookUrl}</td>
                 <td>
@@ -78,10 +78,11 @@ export default class Glowify extends Component {
                   </InputGroup>
                 </td>
                 <td>{glowify.publishBoard.name}</td>
+                <td>{glowify.eventCounter.count}</td>
               </tr>
             ))}
             <tr>
-              <td colSpan="5">
+              <td colSpan="6">
                 <Button tag={Link} to="/glowify-add" color="primary" block>
                   Glowify new Board
                 </Button>

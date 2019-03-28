@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Jumbotron, Container, Tooltip } from 'reactstrap'
-import './Home.css'
+
+const glowStyle = {
+  textShadow:
+    '0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228dff, 0 0 35px #228dff, 0 0 40px #228dff, 0 0 50px #228dff, 0 0 75px #228dff',
+}
 
 export default class Home extends Component {
   constructor(props) {
@@ -24,7 +28,7 @@ export default class Home extends Component {
         <Jumbotron fluid>
           <Container fluid>
             <h1 className="display-4">
-              Welcome to <span className="glow">Glowify</span>{' '}
+              Welcome to <span style={glowStyle}>Glowify</span>{' '}
               <span role="img" aria-label="gold medal">
                 🥇
               </span>
@@ -119,6 +123,10 @@ export default class Home extends Component {
         <ul>
           <li>Points editor: enable users to edit how many points is an event worth</li>
           <li>Security improvements (database and API)</li>
+          <li>
+            Achievements with tags. By reaching certain amount of a specific event you can unlock an achievement
+            (commentator, mover, ...)
+          </li>
         </ul>
       </>
     )
