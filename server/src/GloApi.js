@@ -64,5 +64,16 @@ export default Authorization => {
         return axiosClient.delete(`/boards/${boardId}/cards/${cardId}`).then(response => response.data)
       },
     },
+    labels: {
+      create: async (boardId, labelData) => {
+        return axiosClient.post(`/boards/${boardId}/labels`, labelData).then(response => response.data)
+      },
+      edit: async (boardId, labelId, labelData) => {
+        return axiosClient.post(`/boards/${boardId}/labels/${labelId}`, labelData).then(response => response.data)
+      },
+      delete: async (boardId, labelId) => {
+        return axiosClient.delete(`/boards/${boardId}/labels/${labelId}`).then(response => response.data)
+      },
+    },
   }
 }

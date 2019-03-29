@@ -14,6 +14,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Breadcrumb,
+  BreadcrumbItem,
 } from 'reactstrap'
 import Session from './Session'
 
@@ -153,52 +155,50 @@ export default class AddGlowify extends Component {
 
     return (
       <>
-        <Row>
-          <Col>
-            <Spinner color="primary" className={this.state.isDataLoaded ? 'd-none' : ''} />
-            <Form className={this.state.isDataLoaded ? 'pb-3' : 'd-none'}>
-              <Row>
-                <Col>
-                  <FormGroup>
-                    <Label for="listenBoard">Listen Board</Label>
-                    <Input type="select" name="listenBoard" onChange={this.handleInputChange}>
-                      {this.state.boards.map(board => (
-                        <option key={board.id} value={board.id}>
-                          {board.name}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup>
-                </Col>
-                <Col>
-                  <FormGroup>
-                    <Label for="publishBoard">Publish Board</Label>
-                    <Input type="select" name="publishBoard" onChange={this.handleInputChange}>
-                      {this.state.boards.map(board => (
-                        <option key={board.id} value={board.id}>
-                          {board.name}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Button color="danger" tag={Link} to="/glowifys" onClick={this.toggle}>
-                Cancel
-              </Button>
-              <Button color="primary" className="float-right" onClick={this.toggle}>
-                Add
-              </Button>
-            </Form>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Alert color="danger" className={this.state.alert ? '' : 'd-none'}>
-              {this.state.alert}
-            </Alert>
-          </Col>
-        </Row>
+        <Breadcrumb>
+          <BreadcrumbItem>Glowifys</BreadcrumbItem>
+          <BreadcrumbItem active>Add Glowify</BreadcrumbItem>
+        </Breadcrumb>
+        <div className="text-center" hidden={this.state.isDataLoaded}>
+          <Spinner color="primary" />
+        </div>
+        <Form className={this.state.isDataLoaded ? 'pb-3' : 'd-none'}>
+          <Row>
+            <Col>
+              <FormGroup>
+                <Label for="listenBoard">Listen Board</Label>
+                <Input type="select" name="listenBoard" onChange={this.handleInputChange}>
+                  {this.state.boards.map(board => (
+                    <option key={board.id} value={board.id}>
+                      {board.name}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </Col>
+            <Col>
+              <FormGroup>
+                <Label for="publishBoard">Publish Board</Label>
+                <Input type="select" name="publishBoard" onChange={this.handleInputChange}>
+                  {this.state.boards.map(board => (
+                    <option key={board.id} value={board.id}>
+                      {board.name}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Button color="danger" tag={Link} to="/glowifys" onClick={this.toggle}>
+            Cancel
+          </Button>
+          <Button color="primary" className="float-right" onClick={this.toggle}>
+            Add
+          </Button>
+        </Form>
+        <Alert color="danger" className={this.state.alert ? '' : 'd-none'}>
+          {this.state.alert}
+        </Alert>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Destructive Action</ModalHeader>
           <ModalBody>By glowifying the selected Publish Board you will delete all data in that board</ModalBody>

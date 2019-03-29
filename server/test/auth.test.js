@@ -25,7 +25,7 @@ describe('Auth Route', () => {
   it('Should be invalid route', done => {
     chai
       .request(app.server)
-      .get('/login')
+      .get('/loginer')
       .end((err, res) => {
         res.should.have.status(404)
         done()

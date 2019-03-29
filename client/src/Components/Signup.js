@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import { Button, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap'
+import { Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap'
 import Session from './Session'
 
 export default class Signup extends Component {
@@ -46,25 +46,26 @@ export default class Signup extends Component {
     if (redirectToReferrer) return <Redirect to={from} />
 
     return (
-      <Row>
-        <Col>
-          <Form>
-            <FormGroup>
-              <Label for="username">Username</Label>
-              <Input type="text" name="username" value={this.state.username} onChange={this.handleInputChange} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="email">Email</Label>
-              <Input type="email" name="email" value={this.state.email} onChange={this.handleInputChange} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="password">Password</Label>
-              <Input type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
-            </FormGroup>
-            <Button onClick={this.signup}>Signup</Button>
-          </Form>
-        </Col>
-      </Row>
+      <>
+        <Breadcrumb>
+          <BreadcrumbItem active>Signup</BreadcrumbItem>
+        </Breadcrumb>
+        <Form>
+          <FormGroup>
+            <Label for="username">Username</Label>
+            <Input type="text" name="username" value={this.state.username} onChange={this.handleInputChange} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="email">Email</Label>
+            <Input type="email" name="email" value={this.state.email} onChange={this.handleInputChange} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="password">Password</Label>
+            <Input type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
+          </FormGroup>
+          <Button onClick={this.signup}>Signup</Button>
+        </Form>
+      </>
     )
   }
 }

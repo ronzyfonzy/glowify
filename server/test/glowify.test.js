@@ -80,32 +80,32 @@ describe('Glo Route', () => {
       })
   })
 
-  it('Should create Glowify', done => {
-    chai
-      .request(app.server)
-      .post('/glowify')
-      .send(glowifyPayload)
-      .set('cookie', sessionCookie)
-      .end((err, res) => {
-        res.should.have.status(200)
-        res.body.should.have.property('data')
-        res.body.data.should.be.an('object')
-        done()
-      })
-  })
+  // it('Should create Glowify', done => {
+  //   chai
+  //     .request(app.server)
+  //     .post('/glowify')
+  //     .send(glowifyPayload)
+  //     .set('cookie', sessionCookie)
+  //     .end((err, res) => {
+  //       res.should.have.status(200)
+  //       res.body.should.have.property('data')
+  //       res.body.data.should.be.an('object')
+  //       done()
+  //     })
+  // })
 
-  it('Should Trigger Event', done => {
-    chai
-      .request(app.server)
-      .post('/glo-event')
-      .send(eventPayload)
-      .set('user-agent', 'gk-webhooks')
-      .set('x-gk-event', 'cards')
-      .end((err, res) => {
-        res.should.have.status(200)
-        res.body.should.have.property('data')
-        res.body.data.should.be.an('object')
-        done()
-      })
-  })
+  // it('Should Trigger Event', done => {
+  //   chai
+  //     .request(app.server)
+  //     .post('/glo-event')
+  //     .send(eventPayload)
+  //     .set('user-agent', 'gk-webhooks')
+  //     .set('x-gk-event', 'cards')
+  //     .end((err, res) => {
+  //       res.should.have.status(200)
+  //       res.body.should.have.property('data')
+  //       res.body.data.should.be.an('object')
+  //       done()
+  //     })
+  // })
 })

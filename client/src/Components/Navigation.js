@@ -62,11 +62,6 @@ export default class Navigation extends Component {
                 Add glowify
               </NavLink>
             </NavItem>
-            <NavItem className={Session.isAuthenticated ? '' : 'd-none'}>
-              <NavLink tag={RRNavLink} exact to="/event-types" activeClassName="active">
-                Event Types
-              </NavLink>
-            </NavItem>
             <NavItem className={Session.isAuthenticated ? 'd-none' : ''}>
               <NavLink tag={RRNavLink} exact to="/signup" activeClassName="active">
                 Signup
@@ -77,6 +72,22 @@ export default class Navigation extends Component {
                 Login
               </NavLink>
             </NavItem>
+            <UncontrolledDropdown nav inNavbar className={Session.isAuthenticated ? '' : 'd-none'}>
+              <DropdownToggle nav caret>
+                Gamification
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem tag={RRNavLink} exact to="/event-types" activeClassName="active">
+                  Event Types
+                </DropdownItem>
+                <DropdownItem tag={RRNavLink} exact to="/achievements" activeClassName="active">
+                  Achievements
+                </DropdownItem>
+                <DropdownItem tag={RRNavLink} exact to="/ranks" activeClassName="active">
+                  Ranks
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
             <UncontrolledDropdown nav inNavbar className={Session.isAuthenticated ? '' : 'd-none'}>
               <DropdownToggle nav caret>
                 {`Welcome ${Session.isAuthenticated ? Session.session.username : ''}`}

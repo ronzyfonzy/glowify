@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import { Button, Form, FormGroup, Label, Input, Alert, Row, Col } from 'reactstrap'
+import { Button, Form, FormGroup, Label, Input, Alert, Breadcrumb, BreadcrumbItem } from 'reactstrap'
 import Session from './Session'
 
 export default class Login extends Component {
@@ -42,27 +42,28 @@ export default class Login extends Component {
     if (Session.isAuthenticated) return <Redirect to={from} />
 
     return (
-      <Row>
-        <Col>
-          <Alert color="danger" hidden={true}>
-            You must log in to view the page at {from.pathname}
+      <>
+        <Breadcrumb>
+          <BreadcrumbItem active>Login</BreadcrumbItem>
+        </Breadcrumb>
+        <Alert color="danger" hidden={true}>
+          You must log in to view the page at {from.pathname}
+        </Alert>
+        <Form>
+          <FormGroup>
+            <Label for="username">Username</Label>
+            <Input type="text" name="username" value={this.state.username} onChange={this.handleInputChange} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="password">Password</Label>
+            <Input type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
+          </FormGroup>
+          <Button onClick={this.login}>Log in</Button>
+          <Alert className="mt-3" color="danger" hidden={this.state.authError === null}>
+            {this.state.authError}
           </Alert>
-          <Form>
-            <FormGroup>
-              <Label for="username">Username</Label>
-              <Input type="text" name="username" value={this.state.username} onChange={this.handleInputChange} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="password">Password</Label>
-              <Input type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
-            </FormGroup>
-            <Button onClick={this.login}>Log in</Button>
-            <Alert className="mt-3" color="danger" hidden={this.state.authError === null}>
-              {this.state.authError}
-            </Alert>
-          </Form>
-        </Col>
-      </Row>
+        </Form>
+      </>
     )
   }
 }

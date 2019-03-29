@@ -3,14 +3,14 @@ import { Redirect } from 'react-router-dom'
 import { Table, Breadcrumb, BreadcrumbItem } from 'reactstrap'
 import Session from './Session'
 
-export default class EventTypes extends Component {
+export default class Achievements extends Component {
   constructor(props) {
     super(props)
-    this.state = { redirectToReferrer: null, eventTypes: [] }
+    this.state = { redirectToReferrer: null, achievements: [] }
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/event-types`, {
+    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/achievements`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -31,7 +31,7 @@ export default class EventTypes extends Component {
       })
       .then(response => {
         this.setState({
-          eventTypes: response.data.eventTypes,
+          achievements: response.data.achievements,
         })
       })
       .catch(error => {
@@ -49,24 +49,24 @@ export default class EventTypes extends Component {
       <>
         <Breadcrumb>
           <BreadcrumbItem>Gamification</BreadcrumbItem>
-          <BreadcrumbItem active>Event Types</BreadcrumbItem>
+          <BreadcrumbItem active>Achievements</BreadcrumbItem>
         </Breadcrumb>
         <Table>
           <thead>
             <tr>
               <th>#</th>
-              <th>Event</th>
-              <th>Action</th>
-              <th>Points Gained</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Minimimal Events</th>
             </tr>
           </thead>
           <tbody>
-            {this.state.eventTypes.map(eventType => (
-              <tr key={eventType.id}>
-                <td>{eventType.id}</td>
-                <td>{eventType.event}</td>
-                <td>{eventType.type}</td>
-                <td>{eventType.points}</td>
+            {this.state.achievements.map(achievement => (
+              <tr key={achievement.id}>
+                <td>{achievement.id}</td>
+                <td>{achievement.title}</td>
+                <td>{achievement.description}</td>
+                <td>{achievement.minEvents}</td>
               </tr>
             ))}
           </tbody>

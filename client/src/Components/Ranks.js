@@ -3,14 +3,14 @@ import { Redirect } from 'react-router-dom'
 import { Table, Breadcrumb, BreadcrumbItem } from 'reactstrap'
 import Session from './Session'
 
-export default class EventTypes extends Component {
+export default class Ranks extends Component {
   constructor(props) {
     super(props)
-    this.state = { redirectToReferrer: null, eventTypes: [] }
+    this.state = { redirectToReferrer: null, ranks: [] }
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/event-types`, {
+    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/ranks`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -31,7 +31,7 @@ export default class EventTypes extends Component {
       })
       .then(response => {
         this.setState({
-          eventTypes: response.data.eventTypes,
+          ranks: response.data.ranks,
         })
       })
       .catch(error => {
@@ -49,24 +49,24 @@ export default class EventTypes extends Component {
       <>
         <Breadcrumb>
           <BreadcrumbItem>Gamification</BreadcrumbItem>
-          <BreadcrumbItem active>Event Types</BreadcrumbItem>
+          <BreadcrumbItem active>Ranks</BreadcrumbItem>
         </Breadcrumb>
         <Table>
           <thead>
             <tr>
               <th>#</th>
-              <th>Event</th>
-              <th>Action</th>
-              <th>Points Gained</th>
+              <th>Title</th>
+              <th>Position</th>
+              <th>Minimimal Points</th>
             </tr>
           </thead>
           <tbody>
-            {this.state.eventTypes.map(eventType => (
-              <tr key={eventType.id}>
-                <td>{eventType.id}</td>
-                <td>{eventType.event}</td>
-                <td>{eventType.type}</td>
-                <td>{eventType.points}</td>
+            {this.state.ranks.map(rank => (
+              <tr key={rank.id}>
+                <td>{rank.id}</td>
+                <td>{rank.name}</td>
+                <td>{rank.position}</td>
+                <td>{rank.minPoints}</td>
               </tr>
             ))}
           </tbody>

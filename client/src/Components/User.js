@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import { Button, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap'
+import { Button, Form, FormGroup, Label, Input, Breadcrumb, BreadcrumbItem } from 'reactstrap'
 import Session from './Session'
 
 export default class User extends Component {
@@ -68,19 +68,21 @@ export default class User extends Component {
     if (redirectToReferrer) return <Redirect to={from} />
 
     return (
-      <Row>
-        <Col>
-          <Form>
-            <FormGroup>
-              <Label for="gloApiKey">Personal Access Token</Label>
-              <Input type="text" name="gloApiKey" value={this.state.gloApiKey} onChange={this.handleInputChange} />
-            </FormGroup>
-            <Button onClick={this.save} color={this.state.keyChaned ? 'success' : 'secondary'}>
-              Save
-            </Button>
-          </Form>
-        </Col>
-      </Row>
+      <>
+        <Breadcrumb>
+          <BreadcrumbItem>User</BreadcrumbItem>
+          <BreadcrumbItem active>Preferences</BreadcrumbItem>
+        </Breadcrumb>
+        <Form>
+          <FormGroup>
+            <Label for="gloApiKey">Personal Access Token</Label>
+            <Input type="text" name="gloApiKey" value={this.state.gloApiKey} onChange={this.handleInputChange} />
+          </FormGroup>
+          <Button onClick={this.save} color={this.state.keyChaned ? 'success' : 'secondary'}>
+            Save
+          </Button>
+        </Form>
+      </>
     )
   }
 }

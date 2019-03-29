@@ -6,7 +6,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import cors from 'cors'
-import { sequelize, postSync } from './orm/orm'
+import { sequelize, postSync, ORM } from './orm/orm'
 import auth from './routes/auth'
 import glo from './routes/glo'
 import ticker from './ticker'
@@ -15,6 +15,8 @@ if (!process.env.ENV) {
   console.error('No environment variable defined')
   process.exit()
 }
+
+console.log(`Starting server in '${process.env.ENV}' environment`)
 
 const server = express()
   .use(cookieParser())
@@ -70,7 +72,9 @@ const app = {
       .then(() => {
         return server.listen(process.env.SERVER_PORT, () => {
           console.log(`App started on port ${process.env.SERVER_PORT}`)
-          ticker.startTicker()
+          if (process.env.ENV !== 'test') {
+            ticker.startTicker()
+          }
         })
       })
       .catch(error => {

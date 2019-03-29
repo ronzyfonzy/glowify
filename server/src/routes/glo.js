@@ -20,8 +20,12 @@ const verifyWebhookSignature = async (req, res, next) => {
   const dbGlowify = await ORM.Glowify.findOne({
     where: { listenBoardId: dbBoard.dataValues.id },
     raw: true,
-    attributes: ['id', 'secret'],
+    attributes: ['id', 'secret', 'isActive'],
   })
+
+  if (!dbGlowify.isActive) {
+    return res.status(400).send({ error: 'Glowify is deactivated' })
+  }
 
   req.dbBoard = dbBoard
   req.dbGlowify = dbGlowify
@@ -97,7 +101,7 @@ const createGlowify = async (accountId, listenBoard, publishBoard) => {
 
 const initializePublishBoard = async (gloApiKey, glowify) => {
   if (glowify.publishBoardState === 2) {
-    const rankColumns = await ORM.RankColumm.findAll({ where: { glowifyId: glowify.id }, raw: true })
+    const rankColumns = await ORM.GlowifyRankColumm.findAll({ where: { glowifyId: glowify.id }, raw: true })
     return {
       status: 'already_initialized',
       rankColumns,
@@ -106,13 +110,14 @@ const initializePublishBoard = async (gloApiKey, glowify) => {
 
   const publishBoard = await ORM.Board.findOne({ where: { id: glowify.publishBoardId }, raw: true })
   const rankings = await ORM.Ranking.findAll({ raw: true })
+  const achievements = await ORM.Achievement.findAll()
 
-  const board = await GloApi(gloApiKey).boards.get(publishBoard.gloId, { fields: ['columns'] })
-  const { columns } = board
+  const board = await GloApi(gloApiKey).boards.get(publishBoard.gloId, { fields: ['columns', 'labels'] })
+  const { columns, labels } = board
   const cards = await GloApi(gloApiKey).cards.getAll(publishBoard.gloId)
 
   // Clean publish board
-  if (columns.length > 0 || cards.length > 0) {
+  if (columns.length > 0 || cards.length > 0 || labels.length > 0) {
     console.log(`Cleaning up board ${board.title}${board.id}`)
     for (let card of cards) {
       console.log(`Deleting card ${card.id}`)
@@ -123,23 +128,39 @@ const initializePublishBoard = async (gloApiKey, glowify) => {
       console.log(`Deleting column ${column.id}`)
       await GloApi(gloApiKey).columns.delete(publishBoard.gloId, column.id)
     }
+
+    for (let label of labels) {
+      console.log(`Deleting label ${label.id}`)
+      await GloApi(gloApiKey).labels.delete(publishBoard.gloId, label.id)
+    }
     console.log(`Board cleanup complete`)
   }
 
   // Init publish board
-  let columnsRanks = []
+  let glowifyRankColumm = []
   for (let rank of rankings) {
     console.log(`Creating rank column ${rank.id}`)
     const createdColumn = await GloApi(gloApiKey).columns.create(publishBoard.gloId, rank.name, rank.position)
-    columnsRanks.push({
+    glowifyRankColumm.push({
       glowifyId: glowify.id,
       rankingId: rank.id,
       gloId: createdColumn.id,
     })
   }
-  await ORM.RankColumm.bulkCreate(columnsRanks)
+  await ORM.GlowifyRankColumm.bulkCreate(glowifyRankColumm)
 
-  const rankColumns = await ORM.RankColumm.findAll({ where: { glowifyId: glowify.id }, raw: true })
+  let glowifyAchievements = []
+  for (let achievement of achievements) {
+    const label = await GloApi(gloApiKey).labels.create(publishBoard.gloId, achievement.toJSONGlo())
+    glowifyAchievements.push({
+      gloId: label.id,
+      glowifyId: glowify.id,
+      achievementId: achievement.dataValues.id,
+    })
+  }
+  await ORM.GlowifyAchievement.bulkCreate(glowifyAchievements)
+
+  const rankColumns = await ORM.GlowifyRankColumm.findAll({ where: { glowifyId: glowify.id }, raw: true })
 
   return {
     status: 'initialized',
@@ -179,6 +200,16 @@ router.get('/event-types', veritySession, async (req, res) => {
   res.send({ data: { eventTypes } })
 })
 
+router.get('/achievements', veritySession, async (req, res) => {
+  const achievements = await ORM.Achievement.findAll()
+  res.send({ data: { achievements } })
+})
+
+router.get('/ranks', veritySession, async (req, res) => {
+  const ranks = await ORM.Ranking.findAll()
+  res.send({ data: { ranks } })
+})
+
 router.get('/glowify', veritySession, async (req, res) => {
   const glowify = await ORM.Glowify.scope('boards').findAll({ where: { accountId: req.session.account.id } })
   for (let g of glowify) {
@@ -214,9 +245,15 @@ router.post('/glowify', veritySession, async (req, res) => {
   }
 })
 
-// GloApi('pe8d4c60913055ce02f4db856a324e24d27e7dcb4')
-//   .boards.get('5a902accbc21260e0014b420', { fields: ['columns'] })
-//   .then(r => console.log(r))
-//   .catch(e => console.log(e))
+router.put('/glowify', veritySession, async (req, res) => {
+  await ORM.Glowify.update(
+    {
+      isActive: req.body.isActive,
+    },
+    { where: { id: req.body.id } }
+  )
+  const glowify = await ORM.Glowify.findOne({ where: { id: req.body.id } })
+  res.send({ data: { glowify } })
+})
 
 export default router

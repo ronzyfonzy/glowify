@@ -11,6 +11,9 @@ import Login from './Components/Login'
 import Glowifys from './Components/Glowifys'
 import AddGlowify from './Components/AddGlowify'
 import EventTypes from './Components/EventTypes'
+import Achievements from './Components/Achievements'
+import Ranks from './Components/Ranks'
+// import Footer from './Components/Footer'
 
 const NavigationRouter = withRouter(Navigation)
 
@@ -27,6 +30,8 @@ function AuthExample() {
         <PrivateRoute path="/glowifys" component={Glowifys} />
         <PrivateRoute path="/glowify-add" component={AddGlowify} />
         <PrivateRoute path="/event-types" component={EventTypes} />
+        <PrivateRoute path="/achievements" component={Achievements} />
+        <PrivateRoute path="/ranks" component={Ranks} />
       </Container>
     </Router>
   )

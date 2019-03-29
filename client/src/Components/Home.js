@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Jumbotron, Container, Tooltip } from 'reactstrap'
+import { Jumbotron, Container } from 'reactstrap'
 
 const glowStyle = {
   textShadow:
@@ -36,68 +36,48 @@ export default class Home extends Component {
                 🦑
               </span>
             </h1>
-            <p className="lead">A GitKraken Glo middleware to add gamification to your Glo Boards</p>
+            <p className="lead">A service to add gamification to your Git Kraken Glo Boards</p>
           </Container>
         </Jumbotron>
-        <h4>What it does</h4>
+        <h4>About</h4>
         <p>
-          Glowify listens to changes that a user does on one (Listen) board and gives points to that user. Then it shows
-          the score on the second (Publish) board as a card. Each change gives the user additional points. Once the
-          users achieves enough points he ascends to a higher level (Column).
+          Glowify is a service that enables gamification of GitKraken Glo Bords. You define a Listen and Publish board
+          and each user event done in the Listen board will be processed by Glowify. After the event is processed
+          Glowify will post the results to the Publish board in form of levels (columns), user points (cards) and
+          achievements (labels).
         </p>
         <h4>
           How to get up and running{' '}
           <span role="img" aria-label="man runner">
-            🏃‍♂️
+            🏃‍
           </span>
         </h4>
         <p>
           To enable gamification on your Glo Boards you have to follow the steps bellow BUT if you are like me and don't
           like to read to much you can check out{' '}
-          <a href="https://nimb.ws/7JgYce" target="_blank" rel="noopener noreferrer">
+          <a href="/static/video.webm" target="_blank" rel="noopener noreferrer">
             this video
           </a>
           .
         </p>
         <ol>
-          <li>Firstly create two boards in GitKraken Glo.</li>
           <li>
-            <Link to="/signup">Create an account</Link>
+            <Link to="/signup">Create an account</Link> and <Link to="/login">Login</Link> on Glowify
           </li>
           <li>
-            <Link to="/login">Login</Link> to Glowify
-          </li>
-          <li>
-            Go to <Link to="/user">user preferences</Link> and set the Personal Access Token (PAT). More on generating
-            PAT's read{' '}
+            Go to <Link to="/user">user preferences</Link> and set the Personal Access Token (PAT) from GitKraken. More
+            on generating PAT's read{' '}
             <a href="https://support.gitkraken.com/developers/pats/" target="_blank" rel="noopener noreferrer">
               here
             </a>
           </li>
           <li>
-            Got to <Link to="/glowifys">Glowifys</Link> subpage and click on{' '}
-            <Link to="/glowify-add">Glowify new Board</Link>
-          </li>
-          <li>
-            Select a{' '}
-            <span style={{ textDecoration: 'underline', color: 'blue' }} href="#" id="DisabledAutoHideExample">
-              Listen and a Publish Board
-            </span>{' '}
-            and click Add.{' '}
+            Enable gamification to you board by <Link to="/glowify-add">adding new Glowify</Link>. Select a Listen and a
+            Publish Board and click Add. If needed create a new Publish board.{' '}
             <span role="img" aria-label="man runner">
               ⚠️
             </span>
-            <Tooltip
-              placement="top"
-              isOpen={this.state.tooltipOpen}
-              autohide={false}
-              target="DisabledAutoHideExample"
-              toggle={this.toggle}
-            >
-              Listen board is the board which Glowify will receive events. Upon processing the events Glowify will
-              publish the results to the Publish Board
-            </Tooltip>
-            Content in the Publish board will be deleted
+            <span className="text-danger">Content in the Publish board will be deleted</span>
           </li>
           <li>
             For the selected Listen Board{' '}
@@ -108,26 +88,19 @@ export default class Home extends Component {
             >
               create a webhook
             </a>
-            . Use the information provided on <Link to="/glowifys">Glowifys</Link> to set the Payload URL and Secret
+            . Use the information provided on <Link to="/glowifys">Glowifys list</Link> to set the Payload URL and
+            Secret
           </li>
           <li>
-            Thats it{' '}
+            That's it{' '}
             <span role="img" aria-label="sign of the horns">
               🤘
             </span>
             . Users on the Listen board can start making changes and each change (comment, card move, new column, ...)
-            will add points to the users card on the Publish board
+            will add points to the users card on the Publish board. Users will also unlock achievements by creating
+            enough events of specific event type.
           </li>
         </ol>
-        <h4>Things that still need to be done</h4>
-        <ul>
-          <li>Points editor: enable users to edit how many points is an event worth</li>
-          <li>Security improvements (database and API)</li>
-          <li>
-            Achievements with tags. By reaching certain amount of a specific event you can unlock an achievement
-            (commentator, mover, ...)
-          </li>
-        </ul>
       </>
     )
   }
