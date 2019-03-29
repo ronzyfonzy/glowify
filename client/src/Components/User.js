@@ -8,6 +8,7 @@ export default class User extends Component {
     super(props)
     this.state = { keyChaned: false, gloApiKey: '' }
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
   handleInputChange(event) {
@@ -20,6 +21,12 @@ export default class User extends Component {
       [name]: value,
       keyChaned,
     })
+  }
+
+  handleKeyPress(target) {
+    if (target.charCode === 13) {
+      this.save()
+    }
   }
 
   componentDidMount() {
@@ -76,7 +83,13 @@ export default class User extends Component {
         <Form>
           <FormGroup>
             <Label for="gloApiKey">Personal Access Token</Label>
-            <Input type="text" name="gloApiKey" value={this.state.gloApiKey} onChange={this.handleInputChange} />
+            <Input
+              type="text"
+              name="gloApiKey"
+              value={this.state.gloApiKey}
+              onChange={this.handleInputChange}
+              onKeyPress={this.handleKeyPress}
+            />
           </FormGroup>
           <Button onClick={this.save} color={this.state.keyChaned ? 'success' : 'secondary'}>
             Save

@@ -16,6 +16,7 @@ export default class Signup extends Component {
       }
     }
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
   handleInputChange(event) {
@@ -25,6 +26,12 @@ export default class Signup extends Component {
     this.setState({
       [name]: value,
     })
+  }
+
+  handleKeyPress(target) {
+    if (target.charCode === 13) {
+      this.signup()
+    }
   }
 
   signup = () => {
@@ -53,15 +60,33 @@ export default class Signup extends Component {
         <Form>
           <FormGroup>
             <Label for="username">Username</Label>
-            <Input type="text" name="username" value={this.state.username} onChange={this.handleInputChange} />
+            <Input
+              type="text"
+              name="username"
+              value={this.state.username}
+              onChange={this.handleInputChange}
+              onKeyPress={this.handleKeyPress}
+            />
           </FormGroup>
           <FormGroup>
             <Label for="email">Email</Label>
-            <Input type="email" name="email" value={this.state.email} onChange={this.handleInputChange} />
+            <Input
+              type="email"
+              name="email"
+              value={this.state.email}
+              onChange={this.handleInputChange}
+              onKeyPress={this.handleKeyPress}
+            />
           </FormGroup>
           <FormGroup>
             <Label for="password">Password</Label>
-            <Input type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
+            <Input
+              type="password"
+              name="password"
+              value={this.state.password}
+              onChange={this.handleInputChange}
+              onKeyPress={this.handleKeyPress}
+            />
           </FormGroup>
           <Button onClick={this.signup}>Signup</Button>
         </Form>
