@@ -6,7 +6,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import cors from 'cors'
-import { sequelize, postSync, ORM } from './orm/orm'
+import { sequelize, postSync } from './orm/orm'
 import auth from './routes/auth'
 import glo from './routes/glo'
 import ticker from './ticker'
@@ -35,7 +35,7 @@ const server = express()
       resave: false,
       saveUninitialized: false,
       cookie: {
-        expires: 600000,
+        expires: new Date(Date.now() + 30 * 86400 * 1000),
       },
     })
   )
