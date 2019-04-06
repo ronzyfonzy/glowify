@@ -7,24 +7,6 @@ export default Authorization => {
   })
 
   return {
-    // boards: boardId => {
-    //   return {
-    //     getAll: async params => {
-    //       return axiosClient.get('/boards', { params }).then(response => response.data)
-    //     },
-    //     get: async (boardId, params) => {
-    //       return axiosClient.get(`/boards/${boardId}`, { params }).then(response => response.data)
-    //     },
-    //     cards: cardId => {
-    //       return {
-    //         getAll: async params => {
-    //           return axiosClient.get(`/boards/${boardId}/cards`, { params }).then(response => response.data)
-    //         },
-    //       }
-    //     },
-    //   }
-    // },
-
     boards: {
       getAll: async params => {
         return axiosClient.get('/boards', { params }).then(response => response.data)
