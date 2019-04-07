@@ -10,6 +10,7 @@ This project wasn't created just for the [GitKraken Glo Boards API Contest](http
 
 ## Things that still need/can to be done
 
+- Write development env setup
 - Add [seeds and migration](http://docs.sequelizejs.com/manual/migrations.html) to sequelize
 - Security improvements (database and API)
 - ~~Achievements with tags. By reaching certain amount of a specific event you can unlock an achievement (commentator, mover, ...)~~

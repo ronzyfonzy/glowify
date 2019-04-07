@@ -6,12 +6,15 @@ import Session from './Session'
 export default class Glowify extends Component {
   constructor(props) {
     super(props)
-    this.state = { glowifys: [], isSecretHidden: true }
+    this.state = { glowifys: [], isSecretHidden: true, copyToggler: false }
     this.toggleShow = this.toggleShow.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.copyToClipboard = this.copyToClipboard.bind(this)
   }
 
   componentDidMount() {
+    setInterval(() => this.setState({ copyToggler: false }), 2000)
+
     fetch(`${process.env.REACT_APP_CLIENT_API_URL}/glowify`, {
       method: 'GET',
       credentials: 'include',
@@ -90,6 +93,18 @@ export default class Glowify extends Component {
     const name = target.name
     this.setActive(+name, value)
   }
+
+  copyToClipboard = (id, secret) => {
+    const textField = document.createElement('textarea')
+    textField.innerText = secret
+    const parentElement = document.getElementById('copy-container')
+    parentElement.appendChild(textField)
+    textField.select()
+    document.execCommand('copy')
+    parentElement.removeChild(textField)
+    this.setState({ copyToggler: id })
+  }
+
   render() {
     let { redirectToReferrer } = this.state
     let { from } = this.props.location.state || { from: { pathname: redirectToReferrer } }
@@ -101,6 +116,7 @@ export default class Glowify extends Component {
         <Breadcrumb>
           <BreadcrumbItem active>Glowifys</BreadcrumbItem>
         </Breadcrumb>
+        <div id="copy-container" />
         <Table>
           <thead>
             <tr>
@@ -122,9 +138,20 @@ export default class Glowify extends Component {
                 <td>
                   <InputGroup>
                     <Input type={this.state.isSecretHidden ? 'password' : 'text'} defaultValue={glowify.secret} />
-                    <InputGroupAddon addonType="append">
-                      <Button onClick={this.toggleShow}>Show / Hide</Button>
-                    </InputGroupAddon>
+                    {document.queryCommandSupported('copy') ? (
+                      <InputGroupAddon addonType="append">
+                        <Button
+                          onClick={e => this.copyToClipboard(glowify.id, glowify.secret)}
+                          color={this.state.copyToggler === glowify.id ? 'success' : 'secondary'}
+                        >
+                          Copy
+                        </Button>
+                      </InputGroupAddon>
+                    ) : (
+                      <InputGroupAddon addonType="append" hidden={true}>
+                        <Button onClick={this.toggleShow}>Show/Hide</Button>
+                      </InputGroupAddon>
+                    )}
                   </InputGroup>
                 </td>
                 <td>{glowify.publishBoard.name}</td>

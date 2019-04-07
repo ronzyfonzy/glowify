@@ -14,6 +14,9 @@ export default Authorization => {
       get: async (boardId, params) => {
         return axiosClient.get(`/boards/${boardId}`, { params }).then(response => response.data)
       },
+      create: async name => {
+        return axiosClient.post(`/boards`, { name }).then(response => response.data)
+      },
     },
     columns: {
       getAll: async (boardId, params) => {

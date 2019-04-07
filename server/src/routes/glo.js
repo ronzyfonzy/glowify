@@ -223,8 +223,12 @@ router.get('/api/glowify', veritySession, async (req, res) => {
 router.post('/api/glowify', veritySession, async (req, res) => {
   let { listenBoard, publishBoard } = req.body
 
-  if (publishBoard === null) {
-    // ToDo: create board if not defined in request
+  if (publishBoard === undefined || publishBoard === null) {
+    const createdBoard = await GloApi(req.session.account.gloApiKey).boards.create(`${listenBoard.name} Glowify 🥇🦑`)
+    publishBoard = {
+      id: createdBoard.id,
+      name: createdBoard.name,
+    }
   }
 
   if (!listenBoard || !publishBoard) {

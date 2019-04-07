@@ -19,6 +19,10 @@ import {
 } from 'reactstrap'
 import Session from './Session'
 
+const glowStyle = {
+  textShadow: '0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228dff, 0 0 35px #228dff, 0 0 40px #228dff',
+}
+
 export default class AddGlowify extends Component {
   constructor(props) {
     super(props)
@@ -30,10 +34,13 @@ export default class AddGlowify extends Component {
       boards: [],
       listenBoard: '',
       publishBoard: '',
+      selectedListenBoard: '',
+      selectedPublishBoard: '',
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
-    this.toggle = this.toggle.bind(this)
+    this.toggleModal = this.toggleModal.bind(this)
+    this.checkSelectedData = this.checkSelectedData.bind(this)
   }
 
   componentDidMount() {
@@ -64,7 +71,7 @@ export default class AddGlowify extends Component {
       })
       .then(response => {
         this.setState({
-          boards: [{ id: 0, name: '-- Select board --' }, ...response.data],
+          boards: response.data,
           isDataLoaded: true,
         })
       })
@@ -73,10 +80,36 @@ export default class AddGlowify extends Component {
       })
   }
 
-  toggle() {
+  toggleModal() {
     this.setState(prevState => ({
       modal: !prevState.modal,
     }))
+  }
+
+  checkSelectedData() {
+    const listenBoard = this.state.boards.find(b => b.id === this.state.listenBoard)
+    const publishBoard = this.state.boards.find(b => b.id === this.state.publishBoard)
+
+    if (!listenBoard) {
+      this.setState({
+        alert: 'You have to select a listen board',
+      })
+      return
+    }
+
+    if (this.state.listenBoard === this.state.publishBoard) {
+      this.setState({
+        alert: 'You have to select two diffferent boards OR let Glowify create a publish board',
+      })
+      return
+    }
+
+    this.setState({
+      selectedListenBoard: listenBoard,
+      selectedPublishBoard: publishBoard,
+    })
+
+    this.toggleModal()
   }
 
   handleInputChange(event) {
@@ -94,15 +127,9 @@ export default class AddGlowify extends Component {
     this.setState({
       modal: false,
     })
-    if (this.state.listenBoard === this.state.publishBoard) {
-      this.setState({
-        alert: 'You have to select two diffferent boards',
-      })
-      return
-    }
 
-    const listenBoard = this.state.boards.filter(b => b.id === this.state.listenBoard).pop()
-    const publishBoard = this.state.boards.filter(b => b.id === this.state.publishBoard).pop()
+    const listenBoard = this.state.boards.find(b => b.id === this.state.listenBoard)
+    const publishBoard = this.state.boards.find(b => b.id === this.state.publishBoard)
 
     this.setState({
       isDataLoaded: false,
@@ -161,14 +188,21 @@ export default class AddGlowify extends Component {
         </Breadcrumb>
         <div className="text-center" hidden={this.state.isDataLoaded}>
           <Spinner color="primary" />
+          <p style={glowStyle} className="mt-4" hidden={this.state.selectedListenBoard === ''}>
+            Ow yeah{' '}
+            <span role="img" aria-label="hands raised">
+              🙌
+            </span>{' '}
+            ... <span>Glowifying</span> your <b>{this.state.selectedListenBoard.name}</b> board
+          </p>
         </div>
-        <Form className={this.state.isDataLoaded ? 'pb-3' : 'd-none'}>
+        <Form hidden={!this.state.isDataLoaded}>
           <Row>
             <Col>
               <FormGroup>
                 <Label for="listenBoard">Listen Board</Label>
                 <Input type="select" name="listenBoard" onChange={this.handleInputChange}>
-                  {this.state.boards.map(board => (
+                  {[{ id: 0, name: '-- Select board --' }, ...this.state.boards].map(board => (
                     <option key={board.id} value={board.id}>
                       {board.name}
                     </option>
@@ -180,7 +214,7 @@ export default class AddGlowify extends Component {
               <FormGroup>
                 <Label for="publishBoard">Publish Board</Label>
                 <Input type="select" name="publishBoard" onChange={this.handleInputChange}>
-                  {this.state.boards.map(board => (
+                  {[{ id: -1, name: '-- Create Glowify Board --' }, ...this.state.boards].map(board => (
                     <option key={board.id} value={board.id}>
                       {board.name}
                     </option>
@@ -189,27 +223,47 @@ export default class AddGlowify extends Component {
               </FormGroup>
             </Col>
           </Row>
-          <Button color="danger" tag={Link} to="/glowifys" onClick={this.toggle}>
+          <Button color="danger" tag={Link} to="/glowifys">
             Cancel
           </Button>
-          <Button color="primary" className="float-right" onClick={this.toggle}>
+          <Button color="primary" className="float-right" onClick={this.checkSelectedData}>
             Add
           </Button>
         </Form>
-        <Alert color="danger" className={this.state.alert ? '' : 'd-none'}>
+        <Alert className="mt-3" color="danger" hidden={!this.state.alert}>
           {this.state.alert}
         </Alert>
-        <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Destructive Action</ModalHeader>
-          <ModalBody>By glowifying the selected Publish Board you will delete all data in that board</ModalBody>
+        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>
+            <span role="img" aria-label="warning" hidden={!this.state.selectedPublishBoard}>
+              ⚠️
+            </span>{' '}
+            Confirmation
+          </ModalHeader>
+          <ModalBody>
+            {this.state.selectedPublishBoard ? (
+              <div>
+                Glowify will configure <b>{this.state.selectedListenBoard.name}</b> where ranks and achievements will
+                appear for changes in <b>{this.state.selectedPublishBoard.name}</b>.
+                <br />
+                <br />
+                By glowifying <b>{this.state.selectedPublishBoard.name}</b> you will delete all data in that board.
+              </div>
+            ) : (
+              <div>
+                Glowify will create a <b>new board</b> where ranks and achievements will appear for changes in{' '}
+                <b>{this.state.selectedListenBoard.name}</b>.
+              </div>
+            )}
+          </ModalBody>
           <ModalFooter>
-            <Button color="danger" onClick={this.add}>
+            <Button color={this.state.selectedPublishBoard ? 'danger' : 'success'} onClick={this.add}>
               OK. Let's do this{' '}
               <span role="img" aria-label="flexed biceps">
                 💪
               </span>
             </Button>{' '}
-            <Button color="secondary" onClick={this.toggle}>
+            <Button color="secondary" onClick={this.toggleModal}>
               Cancel
             </Button>
           </ModalFooter>
