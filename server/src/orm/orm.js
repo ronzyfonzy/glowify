@@ -88,7 +88,7 @@ Account.prototype.toJSON = function() {
 
 Glowify.prototype.toJSON = function() {
   let values = Object.assign({}, this.get())
-  values.webhookUrl = `${process.env.SERVER_WEBHOOK_URL}/glo-event`
+  values.webhookUrl = `${process.env.SERVER_WEBHOOK_URL}/api/glo-event`
   return values
 }
 

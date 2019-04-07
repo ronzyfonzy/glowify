@@ -77,14 +77,14 @@ export default class Navigation extends Component {
                 Gamification
               </DropdownToggle>
               <DropdownMenu right>
+                <DropdownItem tag={RRNavLink} exact to="/ranks" activeClassName="active">
+                  Ranks
+                </DropdownItem>
                 <DropdownItem tag={RRNavLink} exact to="/event-types" activeClassName="active">
                   Event Types
                 </DropdownItem>
                 <DropdownItem tag={RRNavLink} exact to="/achievements" activeClassName="active">
                   Achievements
-                </DropdownItem>
-                <DropdownItem tag={RRNavLink} exact to="/ranks" activeClassName="active">
-                  Ranks
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

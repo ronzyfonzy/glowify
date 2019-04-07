@@ -82,7 +82,14 @@ export default class User extends Component {
         </Breadcrumb>
         <Form>
           <FormGroup>
-            <Label for="gloApiKey">Personal Access Token</Label>
+            <Label for="gloApiKey">
+              Personal Access Token{' '}
+              <small>
+                <a href="https://app.gitkraken.com/pats" target="_blank" rel="noopener noreferrer">
+                  (get PAT)
+                </a>
+              </small>
+            </Label>
             <Input
               type="text"
               name="gloApiKey"
