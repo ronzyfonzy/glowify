@@ -168,7 +168,7 @@ const initializePublishBoard = async (gloApiKey, glowify) => {
   }
 }
 
-router.post('/glo-event', verifyWebhookSignature, (req, res) => {
+router.post('/api/glo-event', verifyWebhookSignature, (req, res) => {
   proccessRequest(req.dbGlowify, req.dbBoard, req.headers['x-gk-event'], req.body)
     .then(event => {
       res.status(200).send({ data: event })
@@ -179,7 +179,7 @@ router.post('/glo-event', verifyWebhookSignature, (req, res) => {
     })
 })
 
-router.get('/glo-boards', veritySession, (req, res) => {
+router.get('/api/glo-boards', veritySession, (req, res) => {
   GloApi(req.session.account.gloApiKey)
     .boards.getAll({ archived: false })
     .then(data => {
@@ -195,22 +195,24 @@ router.get('/glo-boards', veritySession, (req, res) => {
     })
 })
 
-router.get('/event-types', veritySession, async (req, res) => {
+router.get('/api/event-types', veritySession, async (req, res) => {
   const eventTypes = await ORM.EventType.findAll()
   res.send({ data: { eventTypes } })
 })
 
-router.get('/achievements', veritySession, async (req, res) => {
-  const achievements = await ORM.Achievement.findAll()
+router.get('/api/achievements', veritySession, async (req, res) => {
+  const achievements = await ORM.Achievement.findAll({
+    include: [{ model: ORM.AchievementEventType, include: [{ model: ORM.EventType }] }],
+  })
   res.send({ data: { achievements } })
 })
 
-router.get('/ranks', veritySession, async (req, res) => {
+router.get('/api/ranks', veritySession, async (req, res) => {
   const ranks = await ORM.Ranking.findAll()
   res.send({ data: { ranks } })
 })
 
-router.get('/glowify', veritySession, async (req, res) => {
+router.get('/api/glowify', veritySession, async (req, res) => {
   const glowify = await ORM.Glowify.scope('boards').findAll({ where: { accountId: req.session.account.id } })
   for (let g of glowify) {
     g.dataValues.eventCounter = await ORM.Event.findAndCountAll({ where: { glowifyId: g.dataValues.id } })
@@ -218,7 +220,7 @@ router.get('/glowify', veritySession, async (req, res) => {
   res.send({ data: { glowify } })
 })
 
-router.post('/glowify', veritySession, async (req, res) => {
+router.post('/api/glowify', veritySession, async (req, res) => {
   let { listenBoard, publishBoard } = req.body
 
   if (publishBoard === null) {
@@ -245,7 +247,7 @@ router.post('/glowify', veritySession, async (req, res) => {
   }
 })
 
-router.put('/glowify', veritySession, async (req, res) => {
+router.put('/api/glowify', veritySession, async (req, res) => {
   await ORM.Glowify.update(
     {
       isActive: req.body.isActive,

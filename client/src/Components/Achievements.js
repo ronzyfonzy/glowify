@@ -10,7 +10,7 @@ export default class Achievements extends Component {
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/achievements`, {
+    fetch(`${process.env.REACT_APP_CLIENT_API_URL}/achievements`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -58,6 +58,7 @@ export default class Achievements extends Component {
               <th>Title</th>
               <th>Description</th>
               <th>Minimimal Events</th>
+              <th>Event triggers</th>
             </tr>
           </thead>
           <tbody>
@@ -67,6 +68,15 @@ export default class Achievements extends Component {
                 <td>{achievement.title}</td>
                 <td>{achievement.description}</td>
                 <td>{achievement.minEvents}</td>
+                <td>
+                  <ul>
+                    {achievement.achievements_event_types.map(aet => (
+                      <li key={`${achievement.id}-${aet.event_type.id}`}>
+                        {aet.event_type.event} / {aet.event_type.type}
+                      </li>
+                    ))}
+                  </ul>
+                </td>
               </tr>
             ))}
           </tbody>

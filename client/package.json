@@ -10,7 +10,8 @@
     "react-dom": "^16.8.3",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
-    "reactstrap": "^7.1.0"
+    "reactstrap": "^7.1.0",
+    "video-react": "^0.13.6"
   },
   "scripts": {
     "start": "react-app-env start --env-file=../.env",

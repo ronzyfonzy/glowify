@@ -10,7 +10,7 @@ export default class Ranks extends Component {
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/ranks`, {
+    fetch(`${process.env.REACT_APP_CLIENT_API_URL}/ranks`, {
       method: 'GET',
       credentials: 'include',
       headers: {

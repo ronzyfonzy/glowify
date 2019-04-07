@@ -45,6 +45,8 @@ Event.addScope('full', { include: [{ model: Glowify, include: { model: Account }
 
 Ranking.hasMany(GlowifyRankColumm, { as: 'rankColumms' })
 
+Achievement.hasMany(AchievementEventType)
+
 AchievementEventType.belongsTo(Achievement)
 AchievementEventType.belongsTo(EventType)
 

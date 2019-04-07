@@ -37,7 +37,7 @@ export default class AddGlowify extends Component {
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/glo-boards`, {
+    fetch(`${process.env.REACT_APP_CLIENT_API_URL}/glo-boards`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -108,7 +108,7 @@ export default class AddGlowify extends Component {
       isDataLoaded: false,
     })
 
-    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/glowify`, {
+    fetch(`${process.env.REACT_APP_CLIENT_API_URL}/glowify`, {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify({

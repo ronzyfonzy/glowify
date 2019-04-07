@@ -14,7 +14,7 @@ class Session {
   }
 
   async callFetch(endpoint, method, body) {
-    return await fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/${endpoint}`, {
+    return await fetch(`${process.env.REACT_APP_CLIENT_API_URL}/${endpoint}`, {
       method: method || 'GET',
       credentials: 'include',
       body: body ? JSON.stringify(body) : null,

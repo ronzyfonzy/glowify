@@ -12,7 +12,7 @@ export default class Glowify extends Component {
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/glowify`, {
+    fetch(`${process.env.REACT_APP_CLIENT_API_URL}/glowify`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -42,7 +42,7 @@ export default class Glowify extends Component {
   }
 
   setActive(id, isActive) {
-    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/glowify`, {
+    fetch(`${process.env.REACT_APP_CLIENT_API_URL}/glowify`, {
       method: 'PUT',
       credentials: 'include',
       headers: {

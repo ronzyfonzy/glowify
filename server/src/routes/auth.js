@@ -3,7 +3,7 @@ import { ORM } from '../orm/orm'
 
 const router = express.Router()
 
-router.post('/signup', (req, res) => {
+router.post('/api/signup', (req, res) => {
   ORM.Account.create({
     username: req.body.username,
     email: req.body.email,
@@ -19,7 +19,7 @@ router.post('/signup', (req, res) => {
     })
 })
 
-router.post('/login', (req, res) => {
+router.post('/api/login', (req, res) => {
   let { username, password } = req.body
 
   ORM.Account.findOne({ where: { username } }).then(account => {
@@ -39,7 +39,7 @@ router.post('/login', (req, res) => {
   })
 })
 
-router.get('/user-preferences', async (req, res) => {
+router.get('/api/user-preferences', async (req, res) => {
   if (req.session.account && req.cookies[process.env.SERVER_SESSION_KEY]) {
     const account = await ORM.Account.findOne({ where: { id: req.session.account.id } })
     if (account) {
@@ -52,7 +52,7 @@ router.get('/user-preferences', async (req, res) => {
   }
 })
 
-router.put('/user-preferences', async (req, res) => {
+router.put('/api/user-preferences', async (req, res) => {
   if (req.session.account && req.cookies[process.env.SERVER_SESSION_KEY]) {
     const account = await ORM.Account.findOne({ where: { id: req.session.account.id } })
     await account.update({ gloApiKey: req.body.gloApiKey })
@@ -67,7 +67,7 @@ router.put('/user-preferences', async (req, res) => {
   }
 })
 
-router.get('/logout', (req, res) => {
+router.get('/api/logout', (req, res) => {
   if (req.session.account && req.cookies[process.env.SERVER_SESSION_KEY]) {
     res.clearCookie(process.env.SERVER_SESSION_KEY)
     return res.status(200).send({})

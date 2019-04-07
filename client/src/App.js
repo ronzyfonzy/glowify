@@ -1,5 +1,5 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Switch } from 'react-router-dom'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { Container } from 'reactstrap'
 import Navigation from './Components/Navigation'
@@ -13,6 +13,7 @@ import AddGlowify from './Components/AddGlowify'
 import EventTypes from './Components/EventTypes'
 import Achievements from './Components/Achievements'
 import Ranks from './Components/Ranks'
+import Route404 from './Components/Route404'
 // import Footer from './Components/Footer'
 
 const NavigationRouter = withRouter(Navigation)
@@ -22,16 +23,19 @@ function AuthExample() {
     <Router>
       <Container>
         <NavigationRouter />
-        <Route path="/" exact component={Home} />
-        <Route path="/home" component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/user" component={User} />
-        <PrivateRoute path="/glowifys" component={Glowifys} />
-        <PrivateRoute path="/glowify-add" component={AddGlowify} />
-        <PrivateRoute path="/event-types" component={EventTypes} />
-        <PrivateRoute path="/achievements" component={Achievements} />
-        <PrivateRoute path="/ranks" component={Ranks} />
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/home" exact component={Home} />
+          <Route path="/login" exact component={Login} />
+          <Route path="/signup" exact component={Signup} />
+          <Route path="/user" exact component={User} />
+          <PrivateRoute path="/glowifys" exact component={Glowifys} />
+          <PrivateRoute path="/glowify-add" exact component={AddGlowify} />
+          <PrivateRoute path="/event-types" exact component={EventTypes} />
+          <PrivateRoute path="/achievements" exact component={Achievements} />
+          <PrivateRoute path="/ranks" exact component={Ranks} />
+          <Route component={Route404} />
+        </Switch>
       </Container>
     </Router>
   )

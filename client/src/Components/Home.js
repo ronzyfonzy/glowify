@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Jumbotron, Container } from 'reactstrap'
+import { Player, BigPlayButton, ControlBar, ForwardControl } from 'video-react'
 
 const glowStyle = {
   textShadow:
@@ -26,7 +27,7 @@ export default class Home extends Component {
     return (
       <>
         <Jumbotron fluid>
-          <Container fluid>
+          <Container fluid className="text-center">
             <h1 className="display-4">
               Welcome to <span style={glowStyle}>Glowify</span>{' '}
               <span role="img" aria-label="gold medal">
@@ -39,30 +40,26 @@ export default class Home extends Component {
             <p className="lead">A service to add gamification to your Git Kraken Glo Boards</p>
           </Container>
         </Jumbotron>
-        <h4>About</h4>
+        <h3>About</h3>
         <p>
-          Glowify is a service that enables gamification of GitKraken Glo Bords. You define a Listen and Publish board
+          Glowify is a service that enables gamification of GitKraken Glo Boards. You define a Listen and Publish board
           and each user event done in the Listen board will be processed by Glowify. After the event is processed
           Glowify will post the results to the Publish board in form of levels (columns), user points (cards) and
           achievements (labels).
         </p>
-        <h4>
+        <h3>
           How to get up and running{' '}
           <span role="img" aria-label="man runner">
             🏃‍
           </span>
-        </h4>
+        </h3>
         <p>
           To enable gamification on your Glo Boards you have to follow the steps bellow BUT if you are like me and don't
-          like to read to much you can check out{' '}
-          <a href="/static/video.webm" target="_blank" rel="noopener noreferrer">
-            this video
-          </a>
-          .
+          like to read to much you can check out the video bellow.
         </p>
         <ol>
           <li>
-            <Link to="/signup">Create an account</Link> and <Link to="/login">Login</Link> on Glowify
+            <Link to="/signup">Create an account</Link> and <Link to="/login">Log into</Link> Glowify
           </li>
           <li>
             Go to <Link to="/user">user preferences</Link> and set the Personal Access Token (PAT) from GitKraken. More
@@ -74,7 +71,7 @@ export default class Home extends Component {
           <li>
             Enable gamification to you board by <Link to="/glowify-add">adding new Glowify</Link>. Select a Listen and a
             Publish Board and click Add. If needed create a new Publish board.{' '}
-            <span role="img" aria-label="man runner">
+            <span role="img" aria-label="warning">
               ⚠️
             </span>
             <span className="text-danger">Content in the Publish board will be deleted</span>
@@ -101,6 +98,15 @@ export default class Home extends Component {
             enough events of specific event type.
           </li>
         </ol>
+
+        <Player playsInline src="https://glowify.robibobi.com/static/video.webm" className="border">
+          <BigPlayButton position="center" />
+          <ControlBar autoHide={false}>
+            <ForwardControl seconds={5} order={3.1} />
+            <ForwardControl seconds={10} order={3.2} />
+            <ForwardControl seconds={30} order={3.3} />
+          </ControlBar>
+        </Player>
       </>
     )
   }

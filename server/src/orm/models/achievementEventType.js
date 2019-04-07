@@ -22,9 +22,9 @@ export function defaults() {
     { achievementId: 3, eventTypeId: 25 },
 
     // Desctuctor
-    { achievementId: 3, eventTypeId: 4 },
-    { achievementId: 3, eventTypeId: 12 },
-    { achievementId: 3, eventTypeId: 18 },
-    { achievementId: 3, eventTypeId: 27 },
+    { achievementId: 4, eventTypeId: 4 },
+    { achievementId: 4, eventTypeId: 12 },
+    { achievementId: 4, eventTypeId: 18 },
+    { achievementId: 4, eventTypeId: 27 },
   ]
 }

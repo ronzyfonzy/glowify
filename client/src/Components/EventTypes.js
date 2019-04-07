@@ -10,7 +10,7 @@ export default class EventTypes extends Component {
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_CLIENT_SERVER_URL}/event-types`, {
+    fetch(`${process.env.REACT_APP_CLIENT_API_URL}/event-types`, {
       method: 'GET',
       credentials: 'include',
       headers: {
