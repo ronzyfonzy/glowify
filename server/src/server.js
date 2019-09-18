@@ -35,7 +35,7 @@ const server = express()
       resave: false,
       saveUninitialized: false,
       cookie: {
-        expires: new Date(Date.now() + 30 * 86400 * 1000),
+        maxAge: 3 * 60 * 60 * 1000, // 3 hours
       },
     })
   )
