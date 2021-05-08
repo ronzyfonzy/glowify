@@ -5,9 +5,9 @@ const router = express.Router()
 
 router.post('/api/signup', (req, res) => {
   ORM.Account.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
+    username: String(req.body.username),
+    email: String(req.body.email),
+    password: String(req.body.password),
   })
     .then(account => {
       req.session.account = account.dataValues
@@ -20,7 +20,8 @@ router.post('/api/signup', (req, res) => {
 })
 
 router.post('/api/login', (req, res) => {
-  let { username, password } = req.body
+  const username = String(req.body.username)
+  const password = String(req.body.password)
 
   ORM.Account.findOne({ where: { username } }).then(account => {
     if (!account) {
